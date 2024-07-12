@@ -27,7 +27,7 @@
 							
 							<div class="d-flex justify-content-end align-items-end mb-3">
 								<div>
-									<a href="@{/admin/restaurants/__${restaurant.getId()}__/edit}" class="me-2">編集</a>
+									<a th:href="@{/admin/restaurants/__${restaurant.getId()}__/edit}" class="me-2">編集</a>
 								</div>
 							</div>
 							
@@ -107,7 +107,7 @@
 									</div>
 								</div>
 								
-								<!--<div class="row pb-2 mb-2 border-bottom">
+								<div class="row pb-2 mb-2 border-bottom">
 									<div class="col-2">
 										<span class="fw-bold">定休日</span>
 									</div>
@@ -120,7 +120,7 @@
 											<span>年中無休</span>
 										</div>
 									</div>
-								</div> -->
+								</div> 
 								
 								<div class="row pb-2 mb-2 border-bottom">
 									<div class="col-2">
@@ -132,7 +132,7 @@
 									</div>
 								</div>
 								
-							<!--	<div class="row pb-2 mb-2 border-bottom">
+								<div class="row pb-2 mb-2 border-bottom">
 									<div class="col-2">
 										<span class="fw-bold">カテゴリ</span>
 									</div>
@@ -144,7 +144,7 @@
 										<div th:if="${categoryRestaurants.isEmpty()}">
 											<span>未設定</span>
 										</div>
-									</div>-->
+									</div>
 								</div>
 							</div>
 						</div>

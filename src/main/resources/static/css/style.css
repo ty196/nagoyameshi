@@ -16,7 +16,7 @@ html {
  }
  
  a:hover {
-     color: #407784;
+    color: #5196a6;
  }
  
  footer {
@@ -49,6 +49,19 @@ html {
  
  .nagoyameshi-btn:hover {
    opacity: 0.8;   
+ }
+ 
+ .nagoyameshi-page-link {
+   color: #5196a6;
+ }
+ 
+ .nagoyameshi-page-link:hover {
+   color: #407784;
+ }
+ 
+ .nagoyameshi-active {
+   background-color: #5196a6 !important;
+   border-color: #5196a6 !important;
  }
  
  .nagoyameshi-link-danger {
