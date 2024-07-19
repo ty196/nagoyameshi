@@ -61,8 +61,7 @@ public class AdminRestaurantController {
 	
 	@GetMapping
 	public String index(@RequestParam(name = "keyword", required = false) String keyword,
-			            @PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.ASC)
-			            Pageable pageable, Model model) {
+			            @PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.ASC) Pageable pageable, Model model) {
 		Page<Restaurant> restaurantPage;
 		
 		if(keyword != null && !keyword.isEmpty()) {
@@ -80,8 +79,8 @@ public class AdminRestaurantController {
 	@GetMapping("/{id}")
     public String show(@PathVariable(name = "id")Integer id, Model model) {
 		Restaurant restaurant = restaurantRepository.getReferenceById(id);
-		List<RegularHolidayRestaurant> regularHolidayRestaurants = regularHolidayRestaurantRepository.findByRestaurantOrderByRegularHoliday_IdAsc(restaurant);
-		List<CategoryRestaurant> categoryRestaurants = categoryRestaurantRepository.findByRestaurantOrderByCategory_IdAsc(restaurant);
+		List<RegularHolidayRestaurant> regularHolidayRestaurants = regularHolidayRestaurantRepository.findByRestaurantOrderByRegularHolidayIdAsc(restaurant);
+		List<CategoryRestaurant> categoryRestaurants = categoryRestaurantRepository.findByRestaurantOrderByCategoryIdAsc(restaurant);
 
 		
 		model.addAttribute("restaurant", restaurant);
@@ -172,8 +171,8 @@ public class AdminRestaurantController {
 	public String edit(@PathVariable(name = "id") Integer id, Model model) {
 		Restaurant restaurant = restaurantRepository.getReferenceById(id);
 		String image = restaurant.getImage();
-		List<Integer> regularHolidayIds = regularHolidayRestaurantRepository.findRegularHolidayIdsByRestaurantOrderByRegularHoliday_IdAsc(restaurant);
-		List<Integer> categoryIds = categoryRestaurantRepository.findCategoryIdsByRestaurantOrderByCategory_IdAsc(restaurant);
+		List<Integer> regularHolidayIds = regularHolidayRestaurantRepository.findRegularHolidayIdsByRestaurantOrderByRegularHolidayIdAsc(restaurant);
+		List<Integer> categoryIds = categoryRestaurantRepository.findCategoryIdsByRestaurantOrderByCategoryIdAsc(restaurant);
 		List<Integer> priceRange = generatePriceRange();
 		List<String> timeRange = generateTimeRange();
 		RestaurantEditForm restaurantEditForm = new RestaurantEditForm(restaurant.getId(),
@@ -203,7 +202,7 @@ public class AdminRestaurantController {
 	}
 
 
-	@PostMapping("/update")
+	@PostMapping("/{id}/update")
 	public String update(@ModelAttribute @Validated RestaurantEditForm restaurantEditForm,
 			             BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 		Integer lowestPrice = restaurantEditForm.getLowestPrice();

@@ -10,10 +10,10 @@ import com.example.nagoyameshi.entity.RegularHolidayRestaurant;
 import com.example.nagoyameshi.entity.Restaurant;
 
 public interface RegularHolidayRestaurantRepository extends JpaRepository<RegularHolidayRestaurant, Integer>{
-	 public List<RegularHolidayRestaurant> findByRestaurantOrderByRegularHoliday_IdAsc(Restaurant restaurant);
+	 public List<RegularHolidayRestaurant> findByRestaurantOrderByRegularHolidayIdAsc(Restaurant restaurant);
 	 
 	 @Query("SELECT rhr.regularHoliday.id FROM RegularHolidayRestaurant rhr WHERE rhr.restaurant = :restaurant ORDER BY rhr.id ASC")
-	 public List<Integer> findRegularHolidayIdsByRestaurantOrderByRegularHoliday_IdAsc(@Param("restaurant") Restaurant restaurant);
+	 public List<Integer> findRegularHolidayIdsByRestaurantOrderByRegularHolidayIdAsc(@Param("restaurant") Restaurant restaurant);
 	 
 	 public void deleteByRestaurant(Restaurant restaurant);
 

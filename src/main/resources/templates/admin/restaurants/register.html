@@ -15,8 +15,6 @@
 			<main>
 				<div class="container py-4 nagoyameshi-container">
 					<div class="row justify-content-center">
-						<!-- サイドバー -->
-						<div th:replace="~{fragment :: sidebar}"></div>
 						
 						<div class="col container">
 							<div class="row justify-content-center">
@@ -148,7 +146,7 @@
 																			       th:value="${regularHoliday.getId()}"
 																			       th:checked="${restaurantRegisterForm.regularHolidayIds != null ? #lists.contains(restaurantRegisterForm.regularHolidayIds, regularHoliday.getId()) : false}"/>
 																			       <label class="form-check-label" th:for="${'regularHoliday' + stat.index}">
-																					   <span class="badge bg-secondary ms-1 th:text=${regularHoliday.getDay()]"></span>
+																					   <span class="badge bg-secondary ms-1" th:text="${regularHoliday.getDay()}"></span>
 																				   </label>
 																		</div>
 																	</div>

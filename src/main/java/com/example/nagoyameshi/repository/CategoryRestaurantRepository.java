@@ -11,10 +11,10 @@ import com.example.nagoyameshi.entity.CategoryRestaurant;
 import com.example.nagoyameshi.entity.Restaurant;
 
 public interface CategoryRestaurantRepository extends JpaRepository<CategoryRestaurant, Integer>{
-	public List<CategoryRestaurant> findByRestaurantOrderByCategory_IdAsc(Restaurant restaurant);
+	public List<CategoryRestaurant> findByRestaurantOrderByCategoryIdAsc(Restaurant restaurant);
 	
 	@Query("SELECT cr.category.id FROM CategoryRestaurant cr WHERE cr.restaurant = :restaurant ORDER BY cr.id ASC")
-	public List<Integer> findCategoryIdsByRestaurantOrderByCategory_IdAsc(@Param("restaurant") Restaurant restaurant);
+	public List<Integer> findCategoryIdsByRestaurantOrderByCategoryIdAsc(@Param("restaurant") Restaurant restaurant);
 	
 	public void deleteByRestaurant(Restaurant restaurant);
 	public void deleteByCategory(Category category);

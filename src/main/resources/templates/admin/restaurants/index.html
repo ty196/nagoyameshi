@@ -31,7 +31,11 @@
 							
 							 <div th:if="${successMessage}" class="alert alert-info" role="alert">
                                  <span th:text="${successMessage}"></span>
-                             </div>                        
+                             </div>
+                             
+                             <div>
+								 <p class="mb-0" th:text="${'計' + #numbers.formatInteger(restaurantPage.getTotalElements(), 1, 'COMMA') + '件'}"></p>
+							 </div>                        
 							
 							<table class="table">
 								<thead>
@@ -85,6 +89,10 @@
 										<li th:each="i : ${#numbers.sequence(0, restaurantPage.getTotalPages() - 1)}" class="page-item">
 											<span th:if="${i == restaurantPage.getNumber()}" class="page-link active nagoyameshi-active" th:text="${i + 1}"></span>
 											<a th:unless="${i == restaurantPage.getNumber()}" th:href="@{/admin/restaurants(page = ${i}, keyword = ${keyword})}" class="page-link nagoyameshi-page-link" th:text="${i + 1}"></a>
+										</li>
+										<li class="page-item">
+											<span th:if="${restaurantPage.isLast()}" class="page-link disabled">次</span> 
+											<a th:unless="${restaurantPage.isLast()}" th:href="@{/admin/restaurants(page = ${restaurantPage.getNumber() + 1})}" class="page-link nagoyameshi-page-link">次</a>
 										</li>
 									</ul>
 								</nav>

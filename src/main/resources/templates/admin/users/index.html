@@ -28,8 +28,8 @@
 								</form>
 							</div>
 							
-							<div th:if="${successMessage}" class="alert alert-info">
-								<span th:text="${successMessage}"></span>
+							<div>
+								<p class="mb-0" th:text="${'計' + #numbers.formatInteger(userPage.getTotalElements(), 1, 'COMMA') + '件'}"></p>
 							</div>
 							
 							<table class="table">
@@ -64,6 +64,10 @@
 										<li th:each="i : ${#numbers.sequence(0, userPage.getTotalPages() - 1)}" class="page-item">
 											<span th:if="${i == userPage.getNumber()}" class="page-link active nagoyameshi-active" th:text="${i + 1}"></span>
 											<a th:unless="${i == userPage.getNumber()}" th:href="@{/admin/users(page = ${i}, keyword = ${keyword})}" class="page-link nagoyameshi-page-link" th:text="${i + 1}"></a>
+										</li>
+										<li class="page-item">
+											<span th:if="${userPage.isLast()}" class="page-link disabled">次</span> 
+											<a th:unless="${userPage.isLast()}" th:href="@{/admin/users(page = ${userPage.getNumber() + 1})}" class="page-link nagoyameshi-page-link">次</a>
 										</li>
 									</ul>
 								</nav>

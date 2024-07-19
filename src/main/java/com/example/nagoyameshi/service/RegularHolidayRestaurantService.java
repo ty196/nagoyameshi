@@ -36,8 +36,8 @@ public class RegularHolidayRestaurantService {
 	
 	@Transactional
 	public void update(List<Integer> newRegularHolidayIds, Restaurant restaurant) {
-		List<RegularHolidayRestaurant> existingRegularHolidayRestaurants = regularHolidayRestaurantRepository.findByRestaurantOrderByRegularHoliday_IdAsc(restaurant);
-        List<Integer> existingRegularHolidayIds = regularHolidayRestaurantRepository.findRegularHolidayIdsByRestaurantOrderByRegularHoliday_IdAsc(restaurant);
+		List<RegularHolidayRestaurant> existingRegularHolidayRestaurants = regularHolidayRestaurantRepository.findByRestaurantOrderByRegularHolidayIdAsc(restaurant);
+        List<Integer> existingRegularHolidayIds = regularHolidayRestaurantRepository.findRegularHolidayIdsByRestaurantOrderByRegularHolidayIdAsc(restaurant);
         
         // 新しいリストがnullの場合、すべての関連付けを削除する
         if (newRegularHolidayIds == null) {
