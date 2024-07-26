@@ -72,7 +72,7 @@
                                                 <div th:if="${#fields.hasErrors('lowestPrice')}" class="text-danger small mb-2" th:errors="*{lowestPrice}"></div>
                                                 <select class="form-control form-select" th:field="*{lowestPrice}">
                                                     <option value="" hidden>選択してください</option>
-                                                    <option th:each="lowestPrice : ${priceRange}" th:value="${lowestPrice}" 
+                                                    <option th:each="lowestPrice : ${lowestPrices}" th:value="${lowestPrice}" 
                                                             th:selected="${lowestPrice == restaurantEditForm.getLowestPrice()}"
                                                             th:text="${#numbers.formatInteger(lowestPrice, 1, 'COMMA') + '円'}"></option>
                                                 </select>                                                
@@ -86,7 +86,7 @@
                                                 <div th:if="${#fields.hasErrors('highestPrice')}" class="text-danger small mb-2" th:errors="*{highestPrice}"></div>     
                                                 <select class="form-control form-select" th:field="*{highestPrice}">
                                                     <option value="" hidden>選択してください</option>
-                                                    <option th:each="highestPrice : ${priceRange}" th:value="${highestPrice}" 
+                                                    <option th:each="highestPrice : ${highestPrices}" th:value="${highestPrice}" 
                                                             th:selected="${highestPrice == restaurantEditForm.getHighestPrice()}"
                                                             th:text="${#numbers.formatInteger(highestPrice, 1, 'COMMA') + '円'}"></option>
                                                 </select>                                                                           
@@ -118,7 +118,7 @@
                                                 <div th:if="${#fields.hasErrors('openingTime')}" class="text-danger small mb-2" th:errors="*{openingTime}"></div>
                                                 <select class="form-control form-select" th:field="*{openingTime}">
                                                     <option value="" hidden>選択してください</option>
-                                                    <option th:each="openingTime : ${timeRange}" th:value="${openingTime}" 
+                                                    <option th:each="openingTime : ${openingTimes}" th:value="${openingTime}" 
                                                             th:selected="${openingTime == restaurantEditForm.getOpeningTime()}" th:text="${openingTime}"></option>
                                                 </select>                            
                                             </div>                                            
@@ -131,7 +131,7 @@
                                                 <div th:if="${#fields.hasErrors('closingTime')}" class="text-danger small mb-2" th:errors="*{closingTime}"></div>
                                                 <select class="form-control form-select" th:field="*{closingTime}">
                                                     <option value="" hidden>選択してください</option>
-                                                    <option th:each="closingTime : ${timeRange}" th:value="${closingTime}" 
+                                                    <option th:each="closingTime : ${closingTimes}" th:value="${closingTime}" 
                                                             th:selected="${closingTime == restaurantEditForm.getClosingTime()}" th:text="${closingTime}"></option>
                                                 </select>                            
                                             </div>                                            

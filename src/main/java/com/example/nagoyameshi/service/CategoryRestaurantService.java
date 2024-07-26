@@ -40,8 +40,8 @@ public class CategoryRestaurantService {
 	
 	@Transactional
 	public void update(List<Integer> newCategoryIds, Restaurant restaurant) {
-		List<CategoryRestaurant> existingCategoryRestaurants = categoryRestaurantRepository.findByRestaurantOrderByCategoryIdAsc(restaurant);
-        List<Integer> existingCategoryIds = categoryRestaurantRepository.findCategoryIdsByRestaurantOrderByCategoryIdAsc(restaurant);
+		List<CategoryRestaurant> existingCategoryRestaurants = categoryRestaurantRepository.findByRestaurantOrderByIdAsc(restaurant);
+        List<Integer> existingCategoryIds = categoryRestaurantRepository.findCategoryIdsByRestaurantOrderByIdAsc(restaurant);
         
         // 新しいリストがnullの場合、すべての関連付けを削除する
         if (newCategoryIds == null) {

@@ -1,7 +1,8 @@
 package com.example.nagoyameshi.controller;
 
 import java.time.LocalTime;
-import java.util.Arrays;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -38,6 +39,24 @@ import com.example.nagoyameshi.service.RestaurantService;
 @Controller
 @RequestMapping("/admin/restaurants")
 public class AdminRestaurantController {
+	// 最低価格と最高価格のセレクトボックスの範囲
+	private final Integer LOWEST_PRICE_MIN = 500;
+	private final Integer LOWEST_PRICE_MAX = 10000;
+	private final Integer HIGHEST_PRICE_MIN = 500;
+	private final Integer HIGHEST_PRICE_MAX = 10000;
+	
+	// 何円刻みにするか
+	private final Integer PRICE_UNIT = 500;
+	
+	// 開店時間と閉店時間のセレクトボックスの範囲（単位：時）
+	private final Integer OPENING_TIME_START = 0;
+	private final Integer OPENING_TIME_END = 24;
+	private final Integer CLOSING_TIME_START = 0;
+	private final Integer CLOSING_TIME_END = 24;
+	
+	// 何分刻みにするか
+	private final Integer TIME_UNIT = 30;
+	
 	private final RestaurantRepository restaurantRepository;
 	private final RegularHolidayRepository regularHolidayRepository;
 	private final RegularHolidayRestaurantRepository regularHolidayRestaurantRepository;
@@ -80,7 +99,7 @@ public class AdminRestaurantController {
     public String show(@PathVariable(name = "id")Integer id, Model model) {
 		Restaurant restaurant = restaurantRepository.getReferenceById(id);
 		List<RegularHolidayRestaurant> regularHolidayRestaurants = regularHolidayRestaurantRepository.findByRestaurantOrderByRegularHolidayIdAsc(restaurant);
-		List<CategoryRestaurant> categoryRestaurants = categoryRestaurantRepository.findByRestaurantOrderByCategoryIdAsc(restaurant);
+		List<CategoryRestaurant> categoryRestaurants = categoryRestaurantRepository.findByRestaurantOrderByIdAsc(restaurant);
 
 		
 		model.addAttribute("restaurant", restaurant);
@@ -95,27 +114,31 @@ public class AdminRestaurantController {
 	public String register(Model model) {
 		List<RegularHoliday> regularHolidays = regularHolidayRepository.findAll();
 		List<Category> categories = categoryRepository.findAll();
-		List<Integer> priceRange = generatePriceRange();
-		List<String> timeRange = generateTimeRange();
+		//List<Integer> priceRange = generatePriceRange();
+		//List<String> timeRange = generateTimeRange();
 		
 		model.addAttribute("restaurantRegisterForm", new RestaurantRegisterForm());
 		model.addAttribute("regularHolidays", regularHolidays);
 		model.addAttribute("categories", categories);
-		model.addAttribute("priceRange", priceRange);
-		model.addAttribute("timeRange", timeRange);
+		model.addAttribute("lowestPrices", generatePriceList(LOWEST_PRICE_MIN, LOWEST_PRICE_MAX, PRICE_UNIT)); 
+        model.addAttribute("highestPrices", generatePriceList(HIGHEST_PRICE_MIN, HIGHEST_PRICE_MAX, PRICE_UNIT)); 
+        model.addAttribute("openingTimes", generateTimeList(OPENING_TIME_START, OPENING_TIME_END, TIME_UNIT));        
+        model.addAttribute("closingTimes", generateTimeList(CLOSING_TIME_START, CLOSING_TIME_END, TIME_UNIT));
+		//model.addAttribute("priceRange", priceRange);
+		//model.addAttribute("timeRange", timeRange);
 		
 		return "admin/restaurants/register";
 	}
 	
-	public List<Integer> generatePriceRange(){
-		return Arrays.asList(1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000);
-	}
+	//public List<Integer> generatePriceRange(){
+		//return Arrays.asList(1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000);
+	//}
 	
-	public List<String> generateTimeRange(){
-		return Arrays.asList("00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00",
-				             "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00",
-				             "18:00", "19:00", "20:00", "21:00", "22:00", "23:00");
-	}
+	//public List<String> generateTimeRange(){
+		//return Arrays.asList("00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00",
+			//	             "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00",
+				//             "18:00", "19:00", "20:00", "21:00", "22:00", "23:00");
+	//}
 	
 	@PostMapping("/create")
 	public String create(@ModelAttribute @Validated RestaurantRegisterForm restaurantRegisterForm,
@@ -150,11 +173,15 @@ public class AdminRestaurantController {
 		if (bindingResult.hasErrors()) {
 			List<RegularHoliday> regularHolidays = regularHolidayRepository.findAll();
 			List<Category> categories = categoryRepository.findAll();
-			List<Integer> priceRange = generatePriceRange();
-			List<String> timeRange = generateTimeRange();
+			//List<Integer> priceRange = generatePriceRange();
+			//List<String> timeRange = generateTimeRange();
 			
-			model.addAttribute("priceRange", priceRange);
-			model.addAttribute("timeRange", timeRange);
+			//model.addAttribute("priceRange", priceRange);
+			//model.addAttribute("timeRange", timeRange);
+			model.addAttribute("lowestPrices", generatePriceList(LOWEST_PRICE_MIN, LOWEST_PRICE_MAX, PRICE_UNIT)); 
+            model.addAttribute("highestPrices", generatePriceList(HIGHEST_PRICE_MIN, HIGHEST_PRICE_MAX, PRICE_UNIT)); 
+            model.addAttribute("openingTimes", generateTimeList(OPENING_TIME_START, OPENING_TIME_END, TIME_UNIT));        
+            model.addAttribute("closingTimes", generateTimeList(CLOSING_TIME_START, CLOSING_TIME_END, TIME_UNIT));
 			model.addAttribute("regularHolidays", regularHolidays);
 			model.addAttribute("categories", categories);
 			
@@ -172,9 +199,9 @@ public class AdminRestaurantController {
 		Restaurant restaurant = restaurantRepository.getReferenceById(id);
 		String image = restaurant.getImage();
 		List<Integer> regularHolidayIds = regularHolidayRestaurantRepository.findRegularHolidayIdsByRestaurantOrderByRegularHolidayIdAsc(restaurant);
-		List<Integer> categoryIds = categoryRestaurantRepository.findCategoryIdsByRestaurantOrderByCategoryIdAsc(restaurant);
-		List<Integer> priceRange = generatePriceRange();
-		List<String> timeRange = generateTimeRange();
+		List<Integer> categoryIds = categoryRestaurantRepository.findCategoryIdsByRestaurantOrderByIdAsc(restaurant);
+		//List<Integer> priceRange = generatePriceRange();
+		//List<String> timeRange = generateTimeRange();
 		RestaurantEditForm restaurantEditForm = new RestaurantEditForm(restaurant.getId(),
                                                                        restaurant.getName(),
                                                                        null,
@@ -193,8 +220,12 @@ public class AdminRestaurantController {
 		
 		model.addAttribute("image", image);
 		model.addAttribute("restaurantEditForm", restaurantEditForm);
-		model.addAttribute("priceRange", priceRange);
-		model.addAttribute("timeRange", timeRange);
+		//model.addAttribute("priceRange", priceRange);
+		//model.addAttribute("timeRange", timeRange);
+		 model.addAttribute("lowestPrices", generatePriceList(LOWEST_PRICE_MIN, LOWEST_PRICE_MAX, PRICE_UNIT)); 
+	        model.addAttribute("highestPrices", generatePriceList(HIGHEST_PRICE_MIN, HIGHEST_PRICE_MAX, PRICE_UNIT)); 
+	        model.addAttribute("openingTimes", generateTimeList(OPENING_TIME_START, OPENING_TIME_END, TIME_UNIT));        
+	        model.addAttribute("closingTimes", generateTimeList(CLOSING_TIME_START, CLOSING_TIME_END, TIME_UNIT));
 		model.addAttribute("regularHolidays", regularHolidays);
 		model.addAttribute("categories", categories);
 		
@@ -235,11 +266,15 @@ public class AdminRestaurantController {
 		if (bindingResult.hasErrors()) {
 			List<RegularHoliday> regularHolidays = regularHolidayRepository.findAll();
 			List<Category> categories = categoryRepository.findAll();
-			List<Integer> priceRange = generatePriceRange();
-			List<String> timeRange = generateTimeRange();
+			//List<Integer> priceRange = generatePriceRange();
+			//List<String> timeRange = generateTimeRange();
 			
-			model.addAttribute("priceRange", priceRange);
-			model.addAttribute("timeRange", timeRange);
+			//model.addAttribute("priceRange", priceRange);
+			//model.addAttribute("timeRange", timeRange);
+			 model.addAttribute("lowestPrices", generatePriceList(LOWEST_PRICE_MIN, LOWEST_PRICE_MAX, PRICE_UNIT)); 
+	            model.addAttribute("highestPrices", generatePriceList(HIGHEST_PRICE_MIN, HIGHEST_PRICE_MAX, PRICE_UNIT)); 
+	            model.addAttribute("openingTimes", generateTimeList(OPENING_TIME_START, OPENING_TIME_END, TIME_UNIT));        
+	            model.addAttribute("closingTimes", generateTimeList(CLOSING_TIME_START, CLOSING_TIME_END, TIME_UNIT));
 			model.addAttribute("regularHolidays", regularHolidays);
 			model.addAttribute("categories", categories);
 			
@@ -249,7 +284,7 @@ public class AdminRestaurantController {
 		restaurantService.update(restaurantEditForm);
 		redirectAttributes.addFlashAttribute("successMessage", "店舗を編集しました。");
 		
-		return "redirect:/admin/restaurants";
+		return "redirect:/admin/restaurants/{id}";
 	}
       
         @PostMapping("/{id}/delete")
@@ -261,6 +296,25 @@ public class AdminRestaurantController {
         	
         	return "redirect:/admin/restaurants";
 	  }
+        
+        private List<Integer> generatePriceList(Integer min, Integer max, Integer unit){
+        	List<Integer> prices = new ArrayList<>();
+        	for (int i = 0; i <= (max-min) / unit; i++) {
+        		int price = min + (unit * i);
+        		prices.add(price);
+        	}
+        	return prices;
+        }
+        
+        private List<String> generateTimeList(Integer start, Integer end, Integer unit){
+        	List<String> times = new ArrayList<>();
+        	for (int i = start * 60; i < end * 60; i += unit) {
+        		String time = LocalTime.MIN.plusMinutes(i).format(DateTimeFormatter.ofPattern("HH:mm"));
+        		times.add(time);
+        	}
+        	return times;
+        	
+        }
 	 }
 	  
 	

@@ -81,6 +81,71 @@ html {
    opacity: 0.8;   
  }
  
+ .nagoyameshi-swiper {
+  width: 100%;
+  height: 480px;
+}
+
+.nagoyameshi-swiper img {
+  width: 100%;
+  height: 480px;
+  object-fit: cover;
+}
+
+.nagoyameshi-overlay-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;  
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+
+.nagoyameshi-overlay-text {      
+  padding: 0 70px;    
+}
+
+.nagoyameshi-catchphrase-heading {
+  font-size: 36px;
+  line-height: 1.5;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 600;
+  text-shadow: 0.25rem 0.25rem 1rem rgb(0 0 0 / 60%);
+}
+
+.nagoyameshi-catchphrase-paragraph {
+  font-size: 16px;
+  line-height: 2;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 400;
+  text-shadow: 0.25rem 0.25rem 1rem rgb(0 0 0 / 60%);
+}
+
+.nagoyameshi-card-link {
+  transition: 0.3s;
+}
+
+.nagoyameshi-card-link:hover {
+  opacity: 0.7;
+}
+
+.nagoyameshi-horizontal-card-image {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+}
+
+ .nagoyameshi-sort-box {
+   width: 150px;
+ }
+ 
+ .nagoyameshi-bg {
+  background-color: #d95204 !important;
+}
+
+.nagoyameshi-remove-favorite-button:hover {
+  color: white;
+}
+ 
  @media screen and (min-width: 1400px) {
    .nagoyameshi-container {
      max-width: 1200px;
