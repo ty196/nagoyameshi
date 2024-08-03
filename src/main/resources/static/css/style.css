@@ -145,6 +145,65 @@ html {
 .nagoyameshi-remove-favorite-button:hover {
   color: white;
 }
+
+/* 星評価ここから */
+.nagoyameshi-star-rating {
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+  white-space: nowrap;
+  color: #cccccc;    
+}
+
+.nagoyameshi-star-rating:before,
+.nagoyameshi-star-rating:after {
+  content: '★★★★★';  
+}    
+
+.nagoyameshi-star-rating:after {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #f29f05;    
+}
+
+.nagoyameshi-star-rating[data-rate="5.0"]:after {
+  width: 100%;
+}
+.nagoyameshi-star-rating[data-rate="4.5"]:after {
+  width: 90%;
+}
+.nagoyameshi-star-rating[data-rate="4.0"]:after {
+  width: 80%;
+}
+.nagoyameshi-star-rating[data-rate="3.5"]:after {
+  width: 70%;
+}
+.nagoyameshi-star-rating[data-rate="3.0"]:after {
+  width: 60%;
+}
+.nagoyameshi-star-rating[data-rate="2.5"]:after {
+  width: 50%;
+}
+.nagoyameshi-star-rating[data-rate="2.0"]:after {
+  width: 40%;
+}
+.nagoyameshi-star-rating[data-rate="1.5"]:after {
+  width: 30%;
+}
+.nagoyameshi-star-rating[data-rate="1.0"]:after {
+  width: 20%;
+}
+.nagoyameshi-star-rating[data-rate="0.5"]:after {
+  width: 10%;
+}
+.nagoyameshi-star-rating[data-rate="0.0"]:after {
+  width: 0%;
+}
+/* 星評価ここまで */
  
  @media screen and (min-width: 1400px) {
    .nagoyameshi-container {

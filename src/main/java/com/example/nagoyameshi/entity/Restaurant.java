@@ -2,7 +2,9 @@ package com.example.nagoyameshi.entity;
 
 import java.sql.Timestamp;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Data;
 
 @Entity
@@ -60,4 +63,14 @@ public class Restaurant {
 	
 	@OneToMany(mappedBy = "restaurant")
     private List<CategoryRestaurant> categoryRestaurants;
+	
+	@Transient // このアノテーションにより、Hibernateがこのフィールドをデータベースカラムとして扱わないようになる  
+    public List<Category> getCategories() {
+        if (!categoryRestaurants.isEmpty()) {
+            return categoryRestaurants.stream()
+                                      .map(CategoryRestaurant::getCategory)
+                                      .collect(Collectors.toList());
+        }
+        return new ArrayList<>();
+    }    
 }

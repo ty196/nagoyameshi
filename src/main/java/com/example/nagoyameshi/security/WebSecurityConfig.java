@@ -19,6 +19,8 @@ public class WebSecurityConfig {
 		http
 		    .authorizeHttpRequests((requests) -> requests
 		    	.requestMatchers("/css/**", "/images/**", "/js/**", "/storage/**", "/", "/signup/**").permitAll() // 全てのユーザーにアクセスを許可するURL
+		    	.requestMatchers("/restaurants/{restaurantId}/reviews/**", "/favorites/**", "/restaurants/{restaurantId}/favorites/**", "/reservations/**", "/restaurants/{restaurantId}/reservations/**").hasAnyRole("FREE_MEMBER", "PAID_MEMBER")
+		    	.requestMatchers("/restaurants/**", "/company", "/terms").hasAnyRole("ANONYMOUS", "FREE_MEMBER", "PAID_MEMBER")
 		    	.requestMatchers("/admin/**").hasRole("ADMIN") // 管理者にのみアクセスを許可するURL
 		    	.anyRequest().authenticated()                  // 上記以外のURLはログインが必要(会員または管理者のどちらでもOK）
 		    )

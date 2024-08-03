@@ -146,6 +146,21 @@
                                         </div>
                                     </div>
                                 </div>
+                                
+                                <th:block sec:authorize="isAnonymous()">
+                                    <div class="text-center">
+                                        <a th:href="@{/login}" class="btn text-white shadow-sm w-50 nagoyameshi-btn">♥ お気に入り追加</a>
+                                    </div>    
+                                </th:block>
+                                <th:block sec:authorize="isAuthenticated()">
+                                    <form th:unless="${hasFavorite}" method="post" th:action="@{/restaurants/__${restaurant.getId()}__/favorites/create}" class="text-center">                                                               
+                                        <button type="submit" class="btn text-white shadow-sm w-50 nagoyameshi-btn">♥ お気に入り追加</button>
+                                    </form> 
+                                    <form th:if="${hasFavorite}" method="post" th:action="@{/favorites/__${favorite.getId()}__/delete}" class="text-center">                                                               
+                                        <button type="submit" class="btn btn-outline-primary shadow-sm w-50 nagoyameshi-remove-favorite-button">♥ お気に入り解除</button>
+                                    </form>  
+                                </th:block>                                                                                                                                              
+                               </th>                              
                             </div>                          
                         </div>
                     </div>

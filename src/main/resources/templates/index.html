@@ -59,7 +59,7 @@
 					</div>
 				</div>
 				
-				<h2 class="text-center mb-3">店舗検索</h2>
+				<h2 class="text-center mb-2">店舗検索</h2>
 				<div class="d-flex justify-content-center">
 					<form method="get" th:action="@{/restaurants}" class="mb-5 nagoyameshi-search-form">
 						<div class="input-group">
@@ -69,10 +69,11 @@
 					</form>
 				</div>
 				
-				<h2 class="text-center mb-3">カテゴリ検索</h2>
-				<div class="d-flex justify-content-center">
-					<div th:each="category : ${categories}">
+				<h2 class="text-center mb-2">カテゴリ検索</h2>
+				<div class="d-flex flex-wrap">
+					<div th:each="category, iterStat : ${categories}">
 						<a th:href="@{/restaurants(categoryId = ${category.getId()})}" class="btn btn-outline-secondary btn-sm me-1 mb-2" th:text="${category.getName()}"></a>
+						<div th:if="${iterStat.index % 2 == 1}" class="w-100"></div>
 					</div>
 				</div>
 				
@@ -80,7 +81,7 @@
                     <div class="row row-cols-xl-6 row-cols-md-3 row-cols-2 g-3 mb-5">
                         <div th:each="newRestaurant : ${newRestaurants}" class="col">                            
                             <a th:href="@{/restaurants/__${newRestaurant.getId()}__}" class="link-dark nagoyameshi-card-link">
-                                <div class="card h-100">
+                                <div class="card h-20">
                                     <img th:unless="${newRestaurant.getImage() == null}" th:src="@{/storage/__${newRestaurant.getImage()}__}" class="card-img-top nagoyameshi-vertical-card-image" alt="店舗画像">                                                                        
                                     <img th:if="${newRestaurant.getImage() == null}" th:src="@{/images/no_image.jpg}" class="card-img-top nagoyameshi-vertical-card-image" alt="画像なし">
                                                                                                                                                     

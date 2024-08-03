@@ -598,3 +598,30 @@ INSERT IGNORE INTO terms (id, content) VALUES
 <h2>第15条（準拠法・裁判管轄）</h2>
 <ol><li>本規約の解釈にあたっては、日本法を準拠法とします。</li>
 <li>本サービスに関して紛争が生じた場合には、当社の本店所在地を管轄する裁判所を専属的合意管轄とします。</li></ol>');
+
+-- favoritesテーブル
+INSERT IGNORE INTO favorites (id, restaurant_id, user_id) VALUES
+(1, 5, 1),
+(2, 10, 1),
+(3, 15, 1),
+(4, 20, 1),
+(5, 25, 1),
+(6, 30, 1),
+(7, 35, 1),
+(8, 40, 1),
+(9, 44, 1),
+(10, 50, 1),
+(11, 55, 1),
+(12, 60, 1),
+(13, 65, 1),
+(14, 70, 1),
+(15, 75, 1),
+(16, 80, 1),
+(17, 84, 1),
+(18, 90, 1),
+(19, 95, 1),
+(20, 100, 1);
+
+-- reviewsテーブル
+INSERT IGNORE INTO reviews (id, content, score, restaurant_id, user_id) VALUES
+(1, '店内の雰囲気も良く、味も美味しかったです。', 5, 1, 1);

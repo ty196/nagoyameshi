@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,12 +17,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.nagoyameshi.entity.Category;
 import com.example.nagoyameshi.entity.CategoryRestaurant;
+import com.example.nagoyameshi.entity.Favorite;
 import com.example.nagoyameshi.entity.RegularHolidayRestaurant;
 import com.example.nagoyameshi.entity.Restaurant;
+import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.repository.CategoryRepository;
 import com.example.nagoyameshi.repository.CategoryRestaurantRepository;
+import com.example.nagoyameshi.repository.FavoriteRepository;
 import com.example.nagoyameshi.repository.RegularHolidayRestaurantRepository;
 import com.example.nagoyameshi.repository.RestaurantRepository;
+import com.example.nagoyameshi.security.UserDetailsImpl;
+import com.example.nagoyameshi.service.FavoriteService;
 
 @Controller
 @RequestMapping("/restaurants")
@@ -36,14 +42,18 @@ public class RestaurantController {
 	private final RestaurantRepository restaurantRepository;
 	private final CategoryRepository categoryRepository;
 	private final RegularHolidayRestaurantRepository regularHolidayRestaurantRepository;
-	private final CategoryRestaurantRepository categoryRestaurantRepository; 
+	private final CategoryRestaurantRepository categoryRestaurantRepository;
+	private final FavoriteRepository favoriteRepository;
+	private final FavoriteService favoriteService;
 	
-	public RestaurantController(RestaurantRepository restaurantRepository, CategoryRepository categoryRepository, 
-			                    RegularHolidayRestaurantRepository regularHolidayRestaurantRepository, CategoryRestaurantRepository categoryRestaurantRepository){
+	public RestaurantController(RestaurantRepository restaurantRepository, CategoryRepository categoryRepository, RegularHolidayRestaurantRepository regularHolidayRestaurantRepository,
+			                    CategoryRestaurantRepository categoryRestaurantRepository, FavoriteRepository favoriteRepository, FavoriteService favoriteService){
 		this.restaurantRepository = restaurantRepository;
 		this.categoryRepository = categoryRepository;
 		this.regularHolidayRestaurantRepository = regularHolidayRestaurantRepository;
 		this.categoryRestaurantRepository = categoryRestaurantRepository;
+		this.favoriteRepository = favoriteRepository;
+		this.favoriteService = favoriteService;
 	}
 	
 	@GetMapping
@@ -72,13 +82,13 @@ public class RestaurantController {
 				restaurantPage = restaurantRepository.findByIdOrderByCreatedAtDesc(categoryId, pageable);
 			}
 		} else if (price != null) {
-			//if (order != null && order.equals("priceAsc")) {
-				//restaurantPage = restaurantRepository.findByLowestPriceLessThanEqualOrderByPriceAsc(price);
-			//}  else if (order != null && order.equals("priceDesc")) {
-			//	restaurantPage = restaurantRepository.findByLowestPriceLessThanEqualOrderByPriceDesc(price);
-			//} else {
-				restaurantPage = restaurantRepository.findByLowestPriceLessThanEqual(price, pageable);
-			//}
+			if (order != null && order.equals("lowestPriceAsc")) {
+				restaurantPage = restaurantRepository.findByLowestPriceLessThanEqualOrderByLowestPriceAsc(price, pageable);
+			}  else if (order != null && order.equals("highestPriceDesc")) {
+				restaurantPage = restaurantRepository.findByLowestPriceLessThanEqualOrderByHighestPriceDesc(price, pageable);
+			} else {
+				restaurantPage = restaurantRepository.findByLowestPriceLessThanEqualOrderByCreatedAtDesc(price, pageable);
+			}
 		} else  {
 			if (order != null && order.equals("lowestPriceAsc")) {
 				restaurantPage = restaurantRepository.findAllByOrderByLowestPriceAsc(pageable);
@@ -103,14 +113,26 @@ public class RestaurantController {
 	}
 	
 	@GetMapping("/{id}")
-    public String show(@PathVariable(name = "id") Integer id, Model model ) {
+    public String show(@PathVariable(name = "id") Integer id, Model model, @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
         Restaurant restaurant = restaurantRepository.getReferenceById(id);
         List<RegularHolidayRestaurant> regularHolidayRestaurants = regularHolidayRestaurantRepository.findByRestaurantOrderByRegularHolidayIdAsc(restaurant);
-        List<CategoryRestaurant> categoryRestaurants = categoryRestaurantRepository.findByRestaurantOrderByIdAsc(restaurant);    
+        List<CategoryRestaurant> categoryRestaurants = categoryRestaurantRepository.findByRestaurantOrderByIdAsc(restaurant); 
+        Favorite favorite = null;
+        boolean hasFavorite = false;
         
+        if (userDetailsImpl != null) {
+        	User user = userDetailsImpl.getUser();
+        	hasFavorite = favoriteService.hasFavorite(restaurant, user);
+        	if (hasFavorite) {
+        		favorite = favoriteRepository.findByRestaurantAndUser(restaurant, user);
+        	}
+        }
+          
         model.addAttribute("restaurant", restaurant);
         model.addAttribute("regularHolidayRestaurants", regularHolidayRestaurants);
         model.addAttribute("categoryRestaurants", categoryRestaurants);
+        model.addAttribute("favorite", favorite);
+        model.addAttribute("hasFavorite", hasFavorite);
         
         return "restaurants/show";
 	}
